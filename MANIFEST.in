@@ -1,0 +1,12 @@
+recursive-include ./api *
+
+include ./config.yml
+include ./requirements.txt
+include ./user_products.csv
+
+
+exclude *.log
+exclude *.cfg
+
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
