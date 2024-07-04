@@ -2,6 +2,9 @@
 FROM python:3.9  
 # Adjust Python version if needed
 
+# Set the working directory
+WORKDIR /app
+
 # Copy project files
 COPY ./api/ api/
 COPY config.yml config.yml

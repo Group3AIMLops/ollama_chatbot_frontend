@@ -1,0 +1,33 @@
+name: CI Pipeline
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  push-image:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Repo Checkout
+      uses: actions/checkout@v3
+
+    - name: Login to Docker hub
+      env:
+        DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME  }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
+
+    - name: Build the Docker image
+      env:
+        DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME  }}
+      run: docker build . -f Dockerfile -t $DOCKER_USER/chatbot_frontend:latest
+
+    - name: Push the Docker Image
+      env:
+        DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME  }}
+      run: docker push $DOCKER_USER/chatbot_frontend:latest
+
+    - name: Logout to Docker hub
+      run: docker logout
+
