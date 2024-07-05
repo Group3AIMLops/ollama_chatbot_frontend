@@ -2,9 +2,6 @@
 FROM python:3.9  
 # Adjust Python version if needed
 
-# Set the working directory
-WORKDIR /app
-
 # Copy project files
 COPY ./api/ api/
 COPY config.yml config.yml
@@ -19,4 +16,4 @@ RUN pip install -r requirement.txt
 EXPOSE 8501
 
 # Run the main application file on container startup
-CMD ["streamlit", "run", "api/app.py"]
+CMD ["streamlit", "run", "api/app.py", "--server.address 0.0.0.0"]
