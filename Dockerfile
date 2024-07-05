@@ -16,4 +16,4 @@ RUN pip install -r requirement.txt
 EXPOSE 8501
 
 # Run the main application file on container startup
-CMD ["streamlit", "run", "api/app.py", "--server.address 0.0.0.0"]
+CMD ["streamlit", "run", "api/app.py", "--server.address", "0.0.0.0"]
