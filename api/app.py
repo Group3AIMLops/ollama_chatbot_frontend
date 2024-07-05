@@ -18,6 +18,7 @@ backend_ip = os.getenv("backend_ip")
 backend_port = os.getenv("backend_port")
 #use_sql = config.app_config.use_sql
 use_sql = os.getenv("use_sql")
+use_sql = use_sql == "True"
 
 if use_sql:
     engine = get_connection()
