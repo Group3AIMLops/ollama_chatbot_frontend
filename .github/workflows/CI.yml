@@ -2,7 +2,7 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - no_ci
+      - main
   workflow_dispatch:
 
 jobs:
@@ -21,12 +21,12 @@ jobs:
     - name: Build the Docker image
       env:
         DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME  }}
-      run: docker build . -f Dockerfile -t $DOCKER_USER/chatbot_frontend:added_icon
+      run: docker build . -f Dockerfile -t $DOCKER_USER/chatbot_frontend:test
 
     - name: Push the Docker Image
       env:
         DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME  }}
-      run: docker push $DOCKER_USER/chatbot_frontend:added_icon
+      run: docker push $DOCKER_USER/chatbot_frontend:test
 
     - name: Logout to Docker hub
       run: docker logout
