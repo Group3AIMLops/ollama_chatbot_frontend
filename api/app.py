@@ -8,7 +8,8 @@ from db import get_connection
 from dotenv import load_dotenv 
 load_dotenv()
 from PIL import Image
-
+import json
+import time
 img = Image.open('api/logo.png')
 
 st.set_page_config(page_title='group3 chatbot', page_icon=img)
@@ -24,6 +25,9 @@ backend_port = os.getenv("backend_port")
 #use_sql = config.app_config.use_sql
 use_sql = os.getenv("use_sql")
 use_sql = use_sql == "True"
+
+if ('session_id' not in st.session_state):
+    st.session_state['session_id'] = random.randint(0, 10e5)
 
 if use_sql:
     engine = get_connection()
@@ -99,15 +103,26 @@ def call_before_session_end(*args):
                 
 def function_call_confirmation(function_to_call, confirmation):
     
-    response = requests.get(f'{backend_ip}:{backend_port}/backend_call', params={'USER_ID': st.session_state.get('user_id'),
+    t = time.time()
+    try:
+        response = requests.get(f'{backend_ip}:{backend_port}/backend_call', params={'USER_ID': st.session_state.get('user_id'),
                                                                 'text' : 'None',
                                                                 'user_selected_product' : st.session_state.get("user_selected_product"),
                                                                 'user_confirmation' : confirmation,
                                                                 'func_to_call' : function_to_call
                                                                 })
     
-    response = response.json()
-    msg = response.get('message', None)
+        response = response.json()
+    except:
+        response = {'error': 'api did not respond'}
+    
+    response['session_id'] = st.session_state['session_id']
+    response['time_taken'] = time.time() - t
+    with open('api_responses.json', 'a') as outfile:
+        json.dump(response, outfile)
+        outfile.write('\n')
+    
+    msg = response.get('message', 'I am sorry I could not understand')
     resp_type = response.get('resp_type', None)
     if resp_type == 'tool_msg':
         st.session_state.messages.append({"role": "assistant", "content": msg})
@@ -128,16 +143,25 @@ def function_call_confirmation(function_to_call, confirmation):
 def runllms(chat):
     USER_ID = st.session_state['user_id']
     st.session_state.messages.append({"role": "user", "content": chat})
+    t = time.time()
+    try:
+        response = requests.get(f'{backend_ip}:{backend_port}/backend_call', params={'USER_ID': USER_ID,
+                                                                    'text' : chat,
+                                                                    'user_selected_product' : st.session_state.get("user_selected_product"),
+                                                                    'user_confirmation' : st.session_state.get("user_confirmation"),
+                                                                    'func_to_call' : st.session_state.get("user_confirmation")
+                                                                    })
+        response = response.json()
+    except:
+        response = {'error': 'api did not respond'}
     
-            
-    response = requests.get(f'{backend_ip}:{backend_port}/backend_call', params={'USER_ID': USER_ID,
-                                                                   'text' : chat,
-                                                                   'user_selected_product' : st.session_state.get("user_selected_product"),
-                                                                   'user_confirmation' : st.session_state.get("user_confirmation"),
-                                                                   'func_to_call' : st.session_state.get("user_confirmation")
-                                                                   })
-    response = response.json()
-    msg = response.get('message', None)
+    response['session_id'] = st.session_state['session_id']
+    response['time_taken'] = time.time() - t
+    with open('api_responses.json', 'a') as outfile:
+        json.dump(response, outfile)
+        outfile.write('\n')
+        
+    msg = response.get('message', 'I am sorry I could not understand')
     order_ids = response.get('orders', [])
     resp_type = response.get('resp_type', '')
     function_to_call = response.get('function_to_call', '')
