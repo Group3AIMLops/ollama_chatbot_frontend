@@ -21,12 +21,12 @@ jobs:
     - name: Build the Docker image
       env:
         DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME  }}
-      run: docker build . -f Dockerfile -t $DOCKER_USER/chatbot_frontend:latest
+      run: docker build . -f Dockerfile -t $DOCKER_USER/chatbot_frontend:added_icon
 
     - name: Push the Docker Image
       env:
         DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME  }}
-      run: docker push $DOCKER_USER/chatbot_frontend:latest
+      run: docker push $DOCKER_USER/chatbot_frontend:added_icon
 
     - name: Logout to Docker hub
       run: docker logout

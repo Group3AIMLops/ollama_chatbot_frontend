@@ -7,6 +7,11 @@ import os
 from db import get_connection
 from dotenv import load_dotenv 
 load_dotenv()
+from PIL import Image
+
+img = Image.open('api/logo.png')
+
+st.set_page_config(page_title='group3 chatbot', page_icon=img)
 
 user_dict = {
     'Biden' : 1,
