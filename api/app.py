@@ -118,6 +118,13 @@ def function_call_confirmation(function_to_call, confirmation):
     
     response['session_id'] = st.session_state['session_id']
     response['time_taken'] = time.time() - t
+    
+    response['USER_ID'] = st.session_state.get('user_id')
+    response['user_side_text'] = 'None'
+    response['user_side_user_selected_product'] = st.session_state.get("user_selected_product")
+    response['user_side_user_confirmation'] = confirmation
+    response['user_side_func_to_call'] = function_to_call
+    
     with open('api_responses.json', 'a') as outfile:
         json.dump(response, outfile)
         outfile.write('\n')
@@ -157,6 +164,13 @@ def runllms(chat):
     
     response['session_id'] = st.session_state['session_id']
     response['time_taken'] = time.time() - t
+    
+    response['USER_ID'] = USER_ID
+    response['user_side_text'] = chat
+    response['user_side_user_selected_product'] = st.session_state.get("user_selected_product")
+    response['user_side_user_confirmation'] = st.session_state.get("user_confirmation")
+    response['user_side_func_to_call'] = st.session_state.get("user_confirmation")
+    
     with open('api_responses.json', 'a') as outfile:
         json.dump(response, outfile)
         outfile.write('\n')
