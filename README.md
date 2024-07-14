@@ -9,4 +9,4 @@ This repository is a frontend part of Customer Conversational Intelligence Platf
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [streamlit-image]: https://docs.streamlit.io/logo.svg
-[streamlit-url] : streamlit.io
+[streamlit-url]: streamlit.io
