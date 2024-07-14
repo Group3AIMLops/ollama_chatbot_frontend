@@ -64,7 +64,15 @@ $ docker image pull sumanthegdedocker/chatbot_frontend:latest
 docker run -d -e use_sql="False" -e backend_ip="http://host.docker.internal" -e backend_port="8001" --add-host host.docker.internal:host-gateway -p 8501:8501 sumanthegdedocker/chatbot_frontend:latest
 ```
 
+## backend repo
+
+you can checkout backend part of this project here 
+
+[backend url][backend-url]
+
+
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [streamlit-image]: https://docs.streamlit.io/logo.svg
 [streamlit-url]: streamlit.io
+[backend-url]: https://github.com/Group3AIMLops/ollama_chatbot_backend
